@@ -1,5 +1,4 @@
 package practicum;
-
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -64,6 +63,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic getEpic(int id) {
+        historyManager.add((epics.get(id)));
         return epics.get(id);
     }
 
@@ -110,6 +110,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask getSubtask(int id) {
+        historyManager.add((subtasks.get(id)));
         return subtasks.get(id);
     }
 
@@ -163,6 +164,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         return result;
     }
+
     public void updateEpicStatus(int epicId) {
         Epic epic = epics.get(epicId);
         if (epic == null) return;
@@ -191,7 +193,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public  List<Task> getHistory(){
-        return  new ArrayList<>(historyManager.getHistory());
-}
+    public List<Task> getHistory() {
+        return new ArrayList<>(historyManager.getHistory());
+    }
 }
