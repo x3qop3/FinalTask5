@@ -13,7 +13,7 @@ class InMemoryHistoryManagerTest {
     @BeforeEach
     void setUp() {
         historyManager = new InMemoryHistoryManager();
-        task1 = new Task("Title1", "Description1", Status.NEW);
+        task1 = new Task("Title11", "Description11", Status.NEW);
         task2 = new Task("Title2", "Description2", Status.IN_PROGRESS);
     }
 
@@ -27,17 +27,16 @@ class InMemoryHistoryManagerTest {
         assertEquals(task1, history.getFirst(), "Задача в истории не совпадает с добавленной");
     }
 
-
-    @Test
+   @Test
     void removeShouldDeleteTaskFromHistory() {
         historyManager.add(task1);
         historyManager.add(task2);
-
+       List<Task> history = historyManager.getHistory();
         historyManager.remove(task1.getId());
-        List<Task> history = historyManager.getHistory();
-
         assertEquals(1, history.size(), "История должна содержать 1 задачу после удаления");
-        assertEquals(task2, history.getFirst(), "Оставшаяся задача должна быть task2");
+        assertEquals(task2,
+                history.getFirst(),
+                "Оставшаяся задача должна быть task2");
     }
 
     @Test
@@ -66,4 +65,12 @@ class InMemoryHistoryManagerTest {
         assertEquals(1, historyManager.getHistory().size(),
                 "История не должна измениться при удалении несуществующей задачи");
     }
+    @Test
+    void checkForFddNullTask(){
+        historyManager.add(null);
+        List<Task> history = historyManager.getHistory();
+        assertTrue(history.isEmpty());
+       // История должна остаться пустой при добавлении null в задачу.
+    }
+
 }
