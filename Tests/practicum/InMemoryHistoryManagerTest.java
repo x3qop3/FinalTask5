@@ -1,49 +1,154 @@
+<<<<<<< HEAD
 package practicum;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
+class InMemoryHistoryManagerTest {
+    private InMemoryHistoryManager historyManager;
+    private Task task1;
+    private Task task2;
 
-public class InMemoryHistoryManagerTest {
-
-
-    @Test
-    void add() {
-        Task task = new Task("Title1", "description1", Status.NEW);  // Создаем задачу с нужными параметрами
-
-        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-
-        historyManager.add(task);
-
-        final List<Task> history = historyManager.getHistory();
-
-        assertNotNull(history, "После добавления задачи, история не должна быть пустой.");
-        assertEquals(1, history.size(), "После добавления задачи, история не должна быть пустой.");
-
+    @BeforeEach
+    void setUp() {
+        historyManager = new InMemoryHistoryManager();
+        task1 = new Task("Title11", "Description11", Status.NEW);
+        task2 = new Task("Title2", "Description2", Status.IN_PROGRESS);
     }
 
+    @Test
+    void addShouldAddTaskToHistory() {
+        historyManager.add(task1);
+        final List<Task> history = historyManager.getHistory();
+
+        assertNotNull(history, "История не должна быть null");
+        assertEquals(1, history.size(), "История должна содержать 1 задачу");
+        assertEquals(task1, history.getFirst(), "Задача в истории не совпадает с добавленной");
+    }
+
+   @Test
+    void removeShouldDeleteTaskFromHistory() {
+        historyManager.add(task1);
+        historyManager.add(task2);
+       List<Task> history = historyManager.getHistory();
+        historyManager.remove(task1.getId());
+        assertEquals(1, history.size(), "История должна содержать 1 задачу после удаления");
+        assertEquals(task2,
+                history.getFirst(),
+                "Оставшаяся задача должна быть task2");
+    }
 
     @Test
-    void HistoryWithUpdate() {
-        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+    void getHistoryShouldReturnEmptyListForEmptyHistory() {
+        List<Task> history = historyManager.getHistory();
 
-        Task task1 = new Task("Title1", "description1", Status.NEW);
+        assertTrue(history.isEmpty(), "История должна быть пустой для нового менеджера");
+    }
+
+    @Test
+    void historyShouldNotContainDuplicates() {
         historyManager.add(task1);
-
-        task1.setTitle("new Title");
-        task1.setDescription("new description");
-        task1.setStatus(Status.IN_PROGRESS);
-
+        historyManager.add(task1);
         historyManager.add(task1);
 
         List<Task> history = historyManager.getHistory();
 
-        assertEquals("Title1", history.get(0).getTitle());
-        assertEquals("new Title", history.get(1).getTitle());
-
-
+        assertEquals(1, history.size(), "История не должна содержать дубликатов");
     }
 
+    @Test
+    void removeNonExistentTaskShouldNotChangeHistory() {
+        historyManager.add(task1);
+        historyManager.remove(999); // Несуществующий ID
 
+        assertEquals(1, historyManager.getHistory().size(),
+                "История не должна измениться при удалении несуществующей задачи");
+    }
+    @Test
+    void checkForFddNullTask(){
+        historyManager.add(null);
+        List<Task> history = historyManager.getHistory();
+        assertTrue(history.isEmpty());
+       // История должна остаться пустой при добавлении null в задачу.
+    }
+
+=======
+package practicum;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+
+class InMemoryHistoryManagerTest {
+    private InMemoryHistoryManager historyManager;
+    private Task task1;
+    private Task task2;
+
+    @BeforeEach
+    void setUp() {
+        historyManager = new InMemoryHistoryManager();
+        task1 = new Task("Title11", "Description11", Status.NEW);
+        task2 = new Task("Title2", "Description2", Status.IN_PROGRESS);
+    }
+
+    @Test
+    void addShouldAddTaskToHistory() {
+        historyManager.add(task1);
+        final List<Task> history = historyManager.getHistory();
+
+        assertNotNull(history, "История не должна быть null");
+        assertEquals(1, history.size(), "История должна содержать 1 задачу");
+        assertEquals(task1, history.getFirst(), "Задача в истории не совпадает с добавленной");
+    }
+
+   @Test
+    void removeShouldDeleteTaskFromHistory() {
+        historyManager.add(task1);
+        historyManager.add(task2);
+       List<Task> history = historyManager.getHistory();
+        historyManager.remove(task1.getId());
+        assertEquals(1, history.size(), "История должна содержать 1 задачу после удаления");
+        assertEquals(task2,
+                history.getFirst(),
+                "Оставшаяся задача должна быть task2");
+    }
+
+    @Test
+    void getHistoryShouldReturnEmptyListForEmptyHistory() {
+        List<Task> history = historyManager.getHistory();
+
+        assertTrue(history.isEmpty(), "История должна быть пустой для нового менеджера");
+    }
+
+    @Test
+    void historyShouldNotContainDuplicates() {
+        historyManager.add(task1);
+        historyManager.add(task1);
+        historyManager.add(task1);
+
+        List<Task> history = historyManager.getHistory();
+
+        assertEquals(1, history.size(), "История не должна содержать дубликатов");
+    }
+
+    @Test
+    void removeNonExistentTaskShouldNotChangeHistory() {
+        historyManager.add(task1);
+        historyManager.remove(999); // Несуществующий ID
+
+        assertEquals(1, historyManager.getHistory().size(),
+                "История не должна измениться при удалении несуществующей задачи");
+    }
+    @Test
+    void checkForFddNullTask(){
+        historyManager.add(null);
+        List<Task> history = historyManager.getHistory();
+        assertTrue(history.isEmpty());
+       // История должна остаться пустой при добавлении null в задачу.
+    }
+
+>>>>>>> 532a33049913d2bfa7cd8a82e3dc70708a15a2fa
 }
